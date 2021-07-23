@@ -9,7 +9,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = auth()->user()->posts;
+        $posts = Post::all();
  
         return response()->json([
             'success' => true,
