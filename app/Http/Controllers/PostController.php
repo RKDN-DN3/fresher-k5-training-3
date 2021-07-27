@@ -78,6 +78,7 @@ class PostController extends Controller
                 'message' => 'Post can not be updated'
             ], 500);
     }
+    
     public function destroy($id)
     {
         $post = auth()->user()->posts()->find($id);
