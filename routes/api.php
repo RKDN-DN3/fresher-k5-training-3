@@ -21,6 +21,6 @@ Route::post('login', [PassportAuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
     Route::resource('posts', PostController::class);
+    Route::resource('tasks',TaskTodoController::class);
     
 });
-Route::resource('tasks',TaskTodoController::class);

@@ -9,7 +9,7 @@ class TaskTodoController extends Controller
 {
     public function index()
     {
-        $tasks = TaskTodo::all();
+        $tasks = TaskTodo::where('user_id', auth()->user()->id)->get();
  
         return response()->json([
             'success' => true,
@@ -66,6 +66,9 @@ class TaskTodoController extends Controller
     }
 
     public function destroy(TaskTodo $task){
+        if ($task->user_id !== auth()->user()->id) {
+            return response()->json('Unauthorized', 401);
+        }
         $task->delete();
         return response()->json('deleted task item');
 
@@ -90,6 +93,9 @@ class TaskTodoController extends Controller
     }
 
     public function update(Request $request, TaskTodo $task){
+        if ($task->user_id !== auth()->user()->id) {
+            return response()->json('Unauthorized', 401);
+        }
         $data = $request->validate([
             'title' => 'required|string',
             'completed' => 'required|boolean',

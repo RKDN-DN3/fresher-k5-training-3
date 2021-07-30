@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Controllers\Controller;
+
 
 class PassportAuthController extends Controller
 {
@@ -35,7 +37,6 @@ class PassportAuthController extends Controller
     public function login(Request $request)
     {
         $data = [
-
             'email' => $request->email,
             'password' => $request->password
         ];
@@ -47,5 +48,10 @@ class PassportAuthController extends Controller
             return response()->json(['error' => 'Unauthorised'], 401);
         }
     }   
+
+    public function logout(){
+        auth('api')->logout();
+        return response()->json(['message' => 'Successfully logged out']);
+    }
     
 }
