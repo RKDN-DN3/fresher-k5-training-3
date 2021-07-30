@@ -46,23 +46,7 @@ class TaskTodoController extends Controller
             'user_id'=>$data['user_id'],
             'title'=>$data['title']
         ]);
-       /* if( TaskTodo::save($task)){
-            
-            return response()->json(
-                [
-                    'success' => true,
-                    'data' => $task->toArray()
-                ]
-                );
-        }
-        else{
-            return response()->json(
-                [
-                    'success' => false,
-                    'data' => 'Task not Add'
-                ]
-                );
-        } */
+      
     }
 
     public function destroy(TaskTodo $task){
@@ -73,23 +57,7 @@ class TaskTodoController extends Controller
         return response()->json('deleted task item');
 
 
-        /* $task =  auth()->user()->taskTodo->find($id);
-        if (!$task) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Task not found'
-            ], 400);
-        }
-        if ($task->delete()) {
-            return response()->json([
-                'success' => true
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Task can not be deleted'
-            ], 500);
-        } */
+       
     }
 
     public function update(Request $request, TaskTodo $task){
