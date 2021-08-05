@@ -17,18 +17,20 @@ class PassportAuthController extends Controller
         $this->validate($request, [
             'name' => 'required|min:4',
             'email' => 'required|email',
+            'phone'=> 'required|min:10',
             'password' => 'required|min:8',
         ]);
  
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password)
+            'password' => bcrypt($request->password),
+            'phone' =>$request->phone,
         ]);
        
         $token = $user->createToken('LaravelAuthApp')->accessToken;
  
-        return response()->json(['token' => $token], 200);
+        return response()->json(['token' => $token, 'message' => 'Successfully sign up'], 200);
     }
  
     /**
@@ -42,8 +44,10 @@ class PassportAuthController extends Controller
         ];
  
         if (auth()->attempt($data)) {
+            $user = User::where('email', $request->email)->first();
             $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
-            return response()->json(['token' => $token], 200);
+            #
+            return response()->json(['token' => $token, 'user'=> $user], 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }
