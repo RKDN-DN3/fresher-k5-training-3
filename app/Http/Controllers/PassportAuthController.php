@@ -2,37 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Http\Controllers\Controller;
-
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class PassportAuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest', ['excepet' => ['logout', 'logout']]);
+    }
     /**
      * Registration
      */
     public function register(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|min:4',
-            'email' => 'required|email',
-            'phone'=> 'required|min:10',
-            'password' => 'required|min:8',
-        ]);
- 
+        /* $request->validate([
+        'name' => 'required',
+        'email' => 'required|email',
+        'phone'=> 'required',
+        'password' => 'required',
+        ]); */
+        $data = $request->all();
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'phone' =>$request->phone,
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'phone' => $data['phone'],
         ]);
-       
+
         $token = $user->createToken('LaravelAuthApp')->accessToken;
- 
+
         return response()->json(['token' => $token, 'message' => 'Successfully sign up'], 200);
     }
- 
+
     /**
      * Login
      */
@@ -40,22 +43,62 @@ class PassportAuthController extends Controller
     {
         $data = [
             'email' => $request->email,
-            'password' => $request->password
+            'password' => $request->password,
         ];
- 
+
         if (auth()->attempt($data)) {
             $user = User::where('email', $request->email)->first();
             $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
-            #
-            return response()->json(['token' => $token, 'user'=> $user], 200);
+
+            return response()->json(['token' => $token, 'user' => $user], 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }
-    }   
-
-    public function logout(){
-        auth('api')->logout();
-        return response()->json(['message' => 'Successfully logged out']);
     }
-    
+
+    public function logout(Request $request)
+    {
+        if ($request->user()) {
+            $request->user()->tokens()->revoke();
+        }
+
+        return response()->json(['message' => 'Successfully logged out'], 200);
+    }
+ /*    public function sendPasswordResetLink(Request $request)
+    {
+        return $this->sendResetLinkEmail($request);
+    }
+
+    protected function sendResetLinkResponse(Request $request, $response)
+    {
+        return response()->json([
+            'message' => 'Password reset email sent.',
+            'data' => $response,
+        ]);
+    }
+
+    protected function sendResetLinkFailedResponse(Request $request, $response)
+    {
+        return response()->json(['message' => 'Email could not be sent to this email address.']);
+    }
+
+    public function callResetPassword(Request $request)
+    {
+        return $this->reset($request);
+    }
+
+    protected function resetPassword($user, $password)
+    {
+        $user->password = Hash::make($password);
+        $user->save();
+        event(new PasswordReset($user));
+    }
+    protected function sendResetResponse(Request $request, $response)
+    {
+        return response()->json(['message' => 'Password reset successfully.']);
+    }
+    protected function sendResetFailedResponse(Request $request, $response)
+    {
+        return response()->json(['message' => 'Failed, Invalid Token.']);
+    } */
 }

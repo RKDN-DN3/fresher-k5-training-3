@@ -5,14 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TaskTodo;
 
-
-class TaskTodoController extends Controller
+class TodoTaskControlerr extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $tasks = TaskTodo::where('user_id', auth()->user()->id)->get();
@@ -22,7 +16,6 @@ class TaskTodoController extends Controller
             'data' => $tasks
         ]);
     }
-
     public function show($id){
         $task = auth()->user()->taskTodo->find($id);
  
@@ -97,6 +90,5 @@ class TaskTodoController extends Controller
         $task->update($data);
         return response($task, 200);
     }
-
 
 }
