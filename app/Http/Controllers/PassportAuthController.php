@@ -59,46 +59,10 @@ class PassportAuthController extends Controller
     public function logout(Request $request)
     {
         if ($request->user()) {
-            $request->user()->tokens()->revoke();
+            $request->user()->tokens()->delete();
         }
 
         return response()->json(['message' => 'Successfully logged out'], 200);
     }
- /*    public function sendPasswordResetLink(Request $request)
-    {
-        return $this->sendResetLinkEmail($request);
-    }
 
-    protected function sendResetLinkResponse(Request $request, $response)
-    {
-        return response()->json([
-            'message' => 'Password reset email sent.',
-            'data' => $response,
-        ]);
-    }
-
-    protected function sendResetLinkFailedResponse(Request $request, $response)
-    {
-        return response()->json(['message' => 'Email could not be sent to this email address.']);
-    }
-
-    public function callResetPassword(Request $request)
-    {
-        return $this->reset($request);
-    }
-
-    protected function resetPassword($user, $password)
-    {
-        $user->password = Hash::make($password);
-        $user->save();
-        event(new PasswordReset($user));
-    }
-    protected function sendResetResponse(Request $request, $response)
-    {
-        return response()->json(['message' => 'Password reset successfully.']);
-    }
-    protected function sendResetFailedResponse(Request $request, $response)
-    {
-        return response()->json(['message' => 'Failed, Invalid Token.']);
-    } */
 }
