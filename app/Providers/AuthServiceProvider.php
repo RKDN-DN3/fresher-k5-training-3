@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+
+use Illuminate\Contracts\Auth\Access\Gate ;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
+
 use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
@@ -14,7 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+         /* \App\Models\User::class => \App\Policies\UserPolicy::class, */
     ];
 
     /**
@@ -22,10 +24,14 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot( )
     {
         $this->registerPolicies();
-
+        Gate::before(function($user, $ability){
+            if($user->isSuperAdmin()){
+                return true;
+            }
+        });
         Passport::routes();
         //
     }

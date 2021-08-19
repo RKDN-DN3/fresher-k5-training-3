@@ -56,4 +56,9 @@ class User extends Authenticatable
         $url = url( 'http://localhost:8080/reset-password/'.$token );
         $this->notify(new MailResetPasswordNotification($url));
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role', 'user_roles');
+    }
 }
