@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PassportAuthController;
 
@@ -21,8 +21,9 @@ Route::post('logout', [PassportAuthController::class, 'logout']);
 Route::post('reset-password', 'ResetPasswordController@forgotPassword');
 Route::post('reset','ResetPasswordController@reset');
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api','role'])->group(function () {
+
+        Route::resource('tasks',TodoTaskControlerr::class);
    
-    Route::resource('tasks',TodoTaskControlerr::class);
     
 });

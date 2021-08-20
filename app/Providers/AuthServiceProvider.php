@@ -15,9 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [
-         /* \App\Models\User::class => \App\Policies\UserPolicy::class, */
-    ];
+
 
     /**
      * Register any authentication / authorization services.
@@ -27,12 +25,14 @@ class AuthServiceProvider extends ServiceProvider
     public function boot( )
     {
         $this->registerPolicies();
-        Gate::before(function($user, $ability){
-            if($user->isSuperAdmin()){
-                return true;
-            }
-        });
         Passport::routes();
+        Passport::setDefaultScope([
+            'user'
+        ]);
+        Passport::tokensCan([
+            'admin' => 'Add/Edit/Delete Users',
+
+        ]);
         //
     }
 }

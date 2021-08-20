@@ -57,8 +57,8 @@ class User extends Authenticatable
         $this->notify(new MailResetPasswordNotification($url));
     }
 
-    public function roles()
+  /*   public function roles()
     {
-        return $this->belongsToMany('App\Models\Role', 'user_roles');
-    }
+        return $this->belongsToMany('App\Models\Role');
+    } */
 }

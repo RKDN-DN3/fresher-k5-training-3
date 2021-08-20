@@ -48,6 +48,11 @@ class PassportAuthController extends Controller
 
         if (auth()->attempt($data)) {
             $user = User::where('email', $request->email)->first();
+           /*  $userRole = $user->role()->first();
+
+            if ($userRole) {
+                $this->scope = $userRole->role;
+            } */
             $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
 
             return response()->json(['token' => $token, 'user' => $user], 200);
