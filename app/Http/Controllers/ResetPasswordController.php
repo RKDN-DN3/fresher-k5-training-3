@@ -14,16 +14,20 @@ use Illuminate\Validation\ValidationException;
 
 class ResetPasswordController extends Controller
 {
-    protected $email = null;
+    private $email = '' ;
+
     public function forgotPassword(Request $request){
         $this->email = $request->only('email') ;
+        $emailhasd = $this->email;
+
         $status = Password::sendResetLink(
-            $this->email
+            $emailhasd
+
             /* $request->only('email') */
         );
         if($status ==Password::RESET_LINK_SENT){
             return[
-                'status' =>__($status)
+                'status' =>__($status),
             ];
         }
         throw ValidationException::withMessages([
@@ -34,14 +38,14 @@ class ResetPasswordController extends Controller
 
     public function reset(Request $request){
 
-        /* $request->validate([
+     /*     $request->validate([
             'token' => 'required',
             'password' => 'required',
             'password_confirm' => 'required|same:password'
-        ]); */
-        
+        ]);  */
+      
         $status = Password::reset(
-            $request->only( $this->email, 'password', 'password_confirmation', 'token'),
+            $request->only( 'email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),
@@ -63,9 +67,11 @@ class ResetPasswordController extends Controller
         return response([
             'message'=> __($status)
         ], 500);
-
-       }
-    /*
+       } 
+   
+    
+    
+       /*
     public function sendMail(Request $request)
     {
         $user = User::where('email', $request->email)->firstOrFail();

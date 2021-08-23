@@ -26,13 +26,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Passport::routes();
-        Passport::setDefaultScope([
+       /*  Passport::setDefaultScope([
             'user'
         ]);
         Passport::tokensCan([
             'admin' => 'Add/Edit/Delete Users',
 
-        ]);
+        ]); */
         //
     }
 }
