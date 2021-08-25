@@ -10,10 +10,11 @@ class TodoTaskControlerr extends Controller
     public function index()
     {
         $tasks = TaskTodo::where('user_id', auth()->user()->id)->get();
- 
+        $taskAll = TaskTodo::all();
         return response()->json([
             'success' => true,
-            'data' => $tasks
+            'data' => $tasks,
+            'tasks' =>$taskAll
         ]);
     }
     public function show($id){
@@ -35,11 +36,13 @@ class TodoTaskControlerr extends Controller
     public function store(Request $request){
         
          $this->validate($request, [
-            'title' => 'required'
+            'title' => 'required',
+            'completed' => 'required|boolean',
         ]);
 
         $task = new TaskTodo();
         $task->title= $request->title;
+        $task->completed = $request->completed;
 
         if(auth()->user()->taskTodo()->save($task)){
             return response()->json([
